@@ -1,0 +1,30 @@
+class Node{
+    Node* link[26];
+    public:
+    bool containkey(char ch){
+        return link[ch-'a']!=NULL;
+    }
+    void put(char ch,Node* node){
+        link[ch-'a']=node;
+    }
+    Node* get(char ch){
+        return link[ch-'a'];
+    }
+};
+int countDistinctSubstrings(string &s)
+{
+    //    Write your code here.
+    Node* root=new Node();
+    int c=0,i,j,n=s.length();
+    for(i=0;i<n;i++){
+        Node* node=root;
+        for(j=i;j<n;j++){
+            if(!node->containkey(s[j])){
+                c++;
+                node->put(s[j],new Node());
+            }
+            node=node->get(s[j]);
+        }
+    }
+    return c+1;
+}
