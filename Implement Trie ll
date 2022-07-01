@@ -1,0 +1,93 @@
+class Node{
+    Node* link[26];
+    int cntendwith=0;
+    int cntprefix=0;
+    
+    public:
+    bool containkey(char ch){
+        return link[ch-'a']!=NULL;
+    }
+    void put(char ch,Node* node){
+        link[ch-'a']=node;
+    }
+    Node* get(char ch){
+        return link[ch-'a'];
+    }
+    void increaseend(){
+        cntendwith++;
+    }
+    void increaseprefix(){
+        cntprefix++;
+    }
+    void deleteend(){
+        cntendwith--;
+    }
+    void reduceprefix(){
+        cntprefix--;
+    }
+    int getend(){
+        return cntendwith;
+    }
+    int getprefix(){
+        return cntprefix;
+    }
+};
+class Trie{
+    Node* root;
+    public:
+
+    Trie(){
+        // Write your code here.
+        root=new Node();
+    }
+
+    void insert(string &word){
+        // Write your code here.
+        Node* node=root;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                node->put(word[i],new Node());
+            }
+            node=node->get(word[i]);
+            node->increaseprefix();
+        }
+        node->increaseend();
+    }
+
+    int countWordsEqualTo(string &word){
+        // Write your code here.
+        Node *node=root;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                return 0;
+            }
+            node=node->get(word[i]);
+        }
+        return node->getend();
+    }
+
+    int countWordsStartingWith(string &word){
+        // Write your code here.
+        Node *node=root;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                return 0;
+            }
+            node=node->get(word[i]);
+        }
+        return node->getprefix();
+    }
+
+    void erase(string &word){
+        // Write your code here.
+        Node *node=root;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                return;
+            }
+            node=node->get(word[i]);
+            node->reduceprefix();
+        }
+        node->deleteend();
+    }
+};
