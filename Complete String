@@ -1,0 +1,75 @@
+class Node{
+    Node* link[26];
+    bool flag=false;
+    public:
+    bool containkey(char ch){
+        return link[ch-'a']!=NULL;
+    }
+    void put(char ch,Node* node){
+        link[ch-'a']=node;
+    }
+    Node* get(char ch){
+        return link[ch-'a'];
+    }
+    void setend(){
+        flag=true;
+    }
+    bool isend(){
+        return flag;
+    }
+};
+class trie{
+   Node* root;
+   public:
+    trie(){
+        root=new Node();
+    }
+    void insert(string word){
+        Node* node=root;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                node->put(word[i],new Node());
+            }
+            node=node->get(word[i]);
+        }
+        node->setend();
+    }
+    
+    bool check(string word){
+        Node* node=root;
+        bool c=true;
+        for(int i=0;i<word.length();i++){
+            if(!node->containkey(word[i])){
+                return false;
+            }
+            node=node->get(word[i]);
+            c=c&node->isend();
+        }
+        return c;
+    }
+};
+string completeString(int n, vector<string> &a){
+    // Write your code here.
+    trie t;
+    for(auto &it:a){
+        t.insert(it);
+    }
+    string ans="";
+    for(auto &it:a){
+        if(t.check(it)){
+            if(ans.length()<it.length()){
+                ans=it;
+            }
+            else if(ans.length()==it.length() && it<ans){
+                ans=it;
+            }
+        }
+    }
+    if(ans==""){
+        return "None";
+    }
+    else{
+       return ans; 
+    }
+
+}
